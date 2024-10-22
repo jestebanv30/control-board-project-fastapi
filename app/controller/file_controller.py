@@ -7,11 +7,29 @@ router = APIRouter()
 @router.post("/upload/")
 async def upload_file(file: UploadFile = File(...), file_service: FileService = Depends()):
     try:
-        # Llamar al servicio para manejar la lógica de guardar y convertir a CSV si es necesario
         file_location = await file_service.process_file(file)
         return {"message": "File processed successfully", "file_location": file_location}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+# Nuevo endpoint para listar todo el contenido del archivo CSV procesado
+@router.get("/list_all/")
+async def list_all(file_service: FileService = Depends()):
+    try:
+        result = await file_service.list_all()
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# Endpoint para cargar el archivo
+#@router.post("/upload/")
+#async def upload_file(file: UploadFile = File(...), file_service: FileService = Depends()):
+#    try:
+#        # Llamar al servicio para manejar la lógica de guardar y convertir a CSV si es necesario
+#        file_location = await file_service.process_file(file)
+#        return {"message": "File processed successfully", "file_location": file_location}
+#    except Exception as e:
+#        raise HTTPException(status_code=400, detail=str(e))
 
 # Endpoint para filtrar por programa y promedio
 @router.get("/filter_by_program_and_avg/")

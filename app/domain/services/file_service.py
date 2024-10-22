@@ -31,14 +31,25 @@ class FileService:
             df.to_csv(self.file_repository.FILE_PATH, index=False) # Guardar el archivo CSV en la ruta especificada
         else:
             csv_file_path = await self.file_repository.save_temp_file(file)
+            df = pd.read_csv(temp_file_path)
+        
+        # Filtrar las columnas seleccionadas
+        df_filtered = df[SELECTED_COLUMNS]
 
-        return csv_file_path
+        # Guarda el archivo CSV filtrado en la ruta especificada
+        df_filtered.to_csv(self.file_repository.FILE_PATH, index=False)
 
-    async def validate_columns(self, df):
-        missing_columns = [col for col in SELECTED_COLUMNS if col not in df.columns]
-        if missing_columns:
-            raise Exception(f"Missing columns: {missing_columns}")
-        return df[SELECTED_COLUMNS]
+        return self.file_repository.FILE_PATH
+    
+    async def list_all(self):
+        # Cargar el archivo CSV
+        df = await self.file_repository.load_csv()
+
+        # Reemplazar los NaN con un valor predeterminado o eliminarlos
+        df = df.fillna(0)  # O puedes usar df.dropna() si prefieres eliminar filas con NaN
+
+        # Convertir DataFrame a una lista de diccionarios y retornar
+        return df.to_dict(orient='records')
 
     async def filter_by_program_and_avg(self, program: str, avg_threshold: float):
         try:

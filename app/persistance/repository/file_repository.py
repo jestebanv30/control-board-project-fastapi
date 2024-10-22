@@ -3,7 +3,7 @@ import pandas as pd
 from fastapi import UploadFile
 
 class FileRepository:
-    FILE_PATH = r"C:\Users\valde\Escritorio\files\processed_data.csv"
+    FILE_PATH = r"C:\Users\valde\Documents\fastAPI-projects\control-board-project-fastapi\data\processed_data.csv"
 
     async def save_temp_file(self, file: UploadFile):
         # Guardar el archivo en la ruta especificada
