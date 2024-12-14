@@ -3,7 +3,7 @@ import pandas as pd
 from fastapi import UploadFile
 
 class FileRepository:
-    FILE_PATH = r"C:\Users\valde\Documents\fastAPI-projects\control-board-project-fastapi\data\processed_data.csv"
+    FILE_PATH = r"C:\Users\valde\Documents\fastAPI-projects\Proyecto Tablero de Control\control-board-project-fastapi\data\processed_data.json"
 
     async def save_temp_file(self, file: UploadFile):
         # Guardar el archivo en la ruta especificada
@@ -13,9 +13,10 @@ class FileRepository:
             temp_file.write(await file.read())
         return file_path
 
-    async def load_csv(self):
+    async def load_data(self):
         try:
             # Cargar el archivo desde la nueva ruta
-            return pd.read_csv(self.FILE_PATH)
+            df = pd.read_json(self.FILE_PATH)
+            return df
         except FileNotFoundError:
             raise Exception("Processed file not found.")

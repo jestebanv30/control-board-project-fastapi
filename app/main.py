@@ -14,7 +14,3 @@ app.add_middleware(
 )
 
 app.include_router(file_controller.router)
-
-@app.get("/prueba")
-async def ping():
-    return {"message": "prueba OK"}
